@@ -1,0 +1,75 @@
+# 서버 설정
+server:
+  port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+
+# Spring 설정
+spring:
+  # 애플리케이션 정보
+  application:
+    name: meokgeoli
+
+  # 데이터베이스 설정 (H2 - 개발용)
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # H2 콘솔 접근 설정 (개발 시 데이터 확인용)
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  # JPA 설정
+  jpa:
+    hibernate:
+      ddl-auto: create-drop  # 앱 시작 시 테이블 생성, 종료 시 삭제
+    show-sql: true           # SQL 쿼리 콘솔 출력
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true     # SQL 쿼리 포맷팅
+    defer-datasource-initialization: true
+
+  # SQL 초기 데이터 설정
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+# 로깅 설정
+logging:
+  level:
+    com.yourpackage: DEBUG    # 본인 패키지명으로 변경
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# OpenAI API 설정 (환경변수로 관리 권장)
+openai:
+  api-key: ${OPENAI_API_KEY:your-api-key-here}
+  model: gpt-3.5-turbo
+
+# 커스텀 애플리케이션 설정
+app:
+  # 거리 계산 관련
+  search:
+    radius-km: 5.0          # 검색 반경 (킬로미터)
+    max-stores: 20          # 최대 검색 상점 수
+
+  # 경로 최적화 관련
+  route:
+    max-stops: 10           # 최대 방문 상점 수
+
+  # 장바구니 설정
+  cart:
+    default-budget: 50000   # 기본 예산 (원)
+    max-items: 50          # 최대 아이템 수
