@@ -10,7 +10,7 @@ server:
 spring:
   # 애플리케이션 정보
   application:
-    name: meokgeoli
+    name: Meokgeoli
 
   # 데이터베이스 설정 (H2 - 개발용)
   datasource:
