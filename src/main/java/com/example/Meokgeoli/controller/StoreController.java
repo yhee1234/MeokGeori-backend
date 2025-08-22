@@ -7,9 +7,9 @@ import com.example.Meokgeoli.service.StoreService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/stores")
@@ -62,6 +62,15 @@ public class StoreController {
             result = service.list();
         }
         return result.stream().map(StoreResponse::from).collect(java.util.stream.Collectors.toList());
+    }
+
+    // 반경 내 상점 검색 API
+    @GetMapping("/search-radius")
+    public List<StoreResponse> searchByRadius(@RequestParam double lat,
+                                              @RequestParam double lon,
+                                              @RequestParam(defaultValue = "1.0") double radius) {
+        List<Store> result = service.findStoresWithinRadius(lat, lon, radius);
+        return result.stream().map(StoreResponse::from).collect(Collectors.toList());
     }
 }
 
