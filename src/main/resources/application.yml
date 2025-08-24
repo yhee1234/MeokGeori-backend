@@ -47,7 +47,7 @@ spring:
 # 로깅 설정
 logging:
   level:
-    com.yourpackage: DEBUG    # 본인 패키지명으로 변경
+    com.example.Meokgeoli: DEBUG
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
   pattern:
@@ -58,7 +58,7 @@ kakao:
   api:
     key: ${KAKAO_API_KEY:}
 
-# OpenAI API 설정 (환경변수로 관리 권장)
+# OpenAI API 설정
 openai:
   api-key: ${OPENAI_API_KEY:}
   model: gpt-3.5-turbo

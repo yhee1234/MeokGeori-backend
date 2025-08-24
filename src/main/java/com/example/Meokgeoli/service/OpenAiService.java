@@ -2,7 +2,6 @@ package com.example.Meokgeoli.service;
 
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.completion.chat.ChatMessageRole;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +13,12 @@ import com.example.Meokgeoli.entity.Store;
 @Service
 public class OpenAiService {
 
-    // 외부 라이브러리의 OpenAiService와 구분하기 위해 전체 경로 사용
     private final com.theokanning.openai.service.OpenAiService openAiClient;
 
     public OpenAiService(@Value("${openai.api-key}") String apiKey) {
-        // API 키가 비어있는지 확인
         if (apiKey == null || apiKey.trim().isEmpty()) {
             throw new IllegalArgumentException("OpenAI API key is not configured");
         }
-
         this.openAiClient = new com.theokanning.openai.service.OpenAiService(apiKey, Duration.ofSeconds(60));
     }
 
@@ -40,8 +36,8 @@ public class OpenAiService {
                 storeNames
         );
 
-        // ChatMessage 생성 방식 수정
-        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        // ChatMessageRole.USER.value() 대신 직접 문자열 사용
+        ChatMessage userMessage = new ChatMessage("user", prompt);
 
         ChatCompletionRequest request = ChatCompletionRequest.builder()
                 .model("gpt-3.5-turbo")
@@ -67,7 +63,7 @@ public class OpenAiService {
                 originalDesc
         );
 
-        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        ChatMessage userMessage = new ChatMessage("user", prompt);
 
         ChatCompletionRequest request = ChatCompletionRequest.builder()
                 .model("gpt-3.5-turbo")
@@ -89,15 +85,16 @@ public class OpenAiService {
         }
 
         String prompt = String.format(
-                "다음 사용자 요청을 분석해서 예산과 핵심 구매 품목을 JSON 형식으로 추출해줘: '%s'. 예시는 다음과 같아. {\"budget\": 10000, \"items\": [\"삼겹살\", \"상추\", \"음료수\"]}",
+                "다음 사용자 요청을 분석해서 예산과 핵심 구매 품목을 JSON 형식으로 추출해줘: '%s'. 반드시 다음 형식으로만 답해줘: {\"budget\": 숫자, \"items\": [\"상품1\", \"상품2\"]}",
                 userInput
         );
 
-        ChatMessage userMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
+        ChatMessage userMessage = new ChatMessage("user", prompt);
 
         ChatCompletionRequest request = ChatCompletionRequest.builder()
                 .model("gpt-3.5-turbo")
                 .messages(List.of(userMessage))
+                .maxTokens(300)
                 .temperature(0.3)
                 .build();
 
