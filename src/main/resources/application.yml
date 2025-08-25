@@ -67,7 +67,7 @@ openai:
 app:
   # 거리 계산 관련
   search:
-    radius-km: 5.0          # 검색 반경 (킬로미터)
+    radius-km: 100.0          # 검색 반경 (킬로미터)
     max-stores: 20          # 최대 검색 상점 수
 
   # 경로 최적화 관련
